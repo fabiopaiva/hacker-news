@@ -89,7 +89,7 @@ describe("Hacker news", function() {
         var item = list.getElementsByTagName('li')[0];
         var by = item.getElementsByClassName('by');
         expect(by.length).not.toBeLessThan(1);
-        expect(by[0].innerHTML).toBe('By: alex_young');
+        expect(by[0].innerHTML).toContain('alex_young');
     });
 
     it('Should render a menu', function() {
