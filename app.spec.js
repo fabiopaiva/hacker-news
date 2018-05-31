@@ -44,7 +44,12 @@ describe("Hacker news", function() {
 
     it('Should render the initial list with 30 items', function() {
         var list = document.getElementById('app').getElementsByClassName('list')[0];
-        var items = list.getElementsByTagName('li');
+        var items = [];
+        for (var i in list.getElementsByTagName('li')) {
+            if (list.getElementsByTagName('li')[i].className === 'story-item') {
+                items.push(list.getElementsByTagName('li')[i])
+            }
+        }
         expect(items.length).toBe(30);
     });
 
@@ -69,7 +74,7 @@ describe("Hacker news", function() {
         var item = list.getElementsByTagName('li')[0];
         var times = item.getElementsByClassName('time');
         expect(times.length).not.toBeLessThan(1);
-        expect(times[0].innerHTML).toBe('31/05/2018, 16:47:53');
+        expect(times[0].innerHTML).toBe('At: 31/05/2018, 16:47');
     });
 
     it('Should render by', function() {
@@ -77,7 +82,7 @@ describe("Hacker news", function() {
         var item = list.getElementsByTagName('li')[0];
         var by = item.getElementsByClassName('by');
         expect(by.length).not.toBeLessThan(1);
-        expect(by[0].innerHTML).toBe('alex_young');
+        expect(by[0].innerHTML).toBe('By: alex_young');
     });
 
     it('Should render a menu', function() {

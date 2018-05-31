@@ -1,0 +1,114 @@
+html, body {
+    margin: 0;
+}
+
+@media (min-width: 1200px) {
+    #app {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+    #app {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    #app {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    #app {
+        max-width: 540px;
+    }
+}
+
+#app {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#app a {
+    text-decoration: none;
+    color: #333333;
+}
+
+#app h1 {
+    font-size: 28px;
+    margin-top: 10px;
+}
+
+#app .menu {
+    float: right;
+    padding: 0;
+    margin: 15px;
+}
+
+#app .menu li {
+    float: left;
+    list-style: none;
+    margin-left: 10px;
+}
+
+#app .menu li a {
+    padding: 10px;
+}
+
+#app .menu li.active a {
+    color: #FFFFFF;
+    background: #333333;
+    cursor: auto;
+}
+
+#app hr {
+    clear: both;
+    border: none;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#app .list {
+    padding: 0;
+    margin: 20px 0;
+    list-style: none;
+}
+
+#app .list li a {
+    background: #f9f9f9;
+    margin: 10px 0;
+    padding: 10px;
+    display: block;
+    color: #333333;
+    font-weight: bold;
+}
+
+#app .list li a ul.story-sub-items {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#app .list li a ul.story-sub-items li {
+    float: left;
+}
+
+#app .list li a ul.story-sub-items li {
+    font-size: 12px;
+    font-weight: normal;
+    margin-right: 5px;
+}
+
+#app .load-more {
+    display: block;
+    margin-bottom: 30px;
+}
+
+.clr {
+    clear: both;
+}

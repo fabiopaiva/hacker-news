@@ -9,10 +9,31 @@ function startApp(){
 		var story = JSON.parse(event.currentTarget.response);
 		var list = document.getElementById('app').getElementsByClassName('list')[0];
 		var storyItem = document.createElement('li');
-		storyItem.appendChild(createLinkElement(story));
-		storyItem.appendChild(createScoreElement(story));
-		storyItem.appendChild(createTimeElement(story));
-		storyItem.appendChild(createByElement(story));
+		storyItem.className = 'story-item';
+		var link = createLinkElement(story);
+
+		var subList = document.createElement('ul');
+		subList.className = 'story-sub-items';
+		var scoreListItem = document.createElement('li');
+		scoreListItem.appendChild(createScoreElement(story));
+		subList.appendChild(scoreListItem);
+		link.appendChild(subList);
+
+		var createByListItem = document.createElement('li');
+		createByListItem.appendChild(createByElement(story));
+		subList.appendChild(createByListItem);
+		link.appendChild(subList);
+
+		var timeListItem = document.createElement('li');
+		timeListItem.appendChild(createTimeElement(story));
+		subList.appendChild(timeListItem);
+		link.appendChild(subList);
+
+		var clr = document.createElement('div');
+		clr.className = 'clr';
+		link.appendChild(clr);
+
+		storyItem.appendChild(link);
 		list.appendChild(storyItem);
 	}
 
@@ -35,7 +56,12 @@ function startApp(){
 	function createTimeElement(story) {
 		var time = document.createElement('div');
 		var date = new Date(story.time * 1000);
-		time.innerText = date.toLocaleString();
+		time.innerText = 'At: ' +
+			('0' + date.getDate()).slice(-2) + '/' +
+			('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+			date.getFullYear() + ', ' +
+			('0' + date.getHours()).slice(-2) + ':' +
+			('0' + date.getMinutes()).slice(-2);
 		time.className = 'time';
 		return time;
 	}
@@ -43,7 +69,7 @@ function startApp(){
 	function createByElement(story) {
 		var by = document.createElement('div');
 		by.className = 'by';
-		by.innerText = story.by;
+		by.innerText = 'By: ' + story.by;
 		return by;
 	}
 
@@ -87,7 +113,7 @@ function startApp(){
 		if (display) {
 			linkMore.setAttribute('href', '#');
 			linkMore.className = 'load-more';
-			linkMore.innerText = 'More';
+			linkMore.innerText = 'Load more';
 			linkMore.onclick = loadMore;
 			document.getElementById('app').appendChild(linkMore);
 		} else if (exist.length) {
@@ -116,8 +142,9 @@ function startApp(){
 		li.className = endpoint === currentEndpoint ? 'active' : '';
 		var a = document.createElement('a');
 		a.setAttribute('href', '#');
-		a.onclick = function() {
-			loadEndpoint(endpoint);
+		a.onclick = function(event) {
+			event.preventDefault();
+			endpoint !== currentEndpoint ? loadEndpoint(endpoint) : Function.prototype();
 		}
 		a.innerText = label;
 		li.appendChild(a);
