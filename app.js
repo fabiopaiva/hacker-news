@@ -19,7 +19,9 @@
 
 	function processList (event) {
 		var storiesList = JSON.parse(event.currentTarget.response);
-		Array.map(storiesList, renderStory);
+		for (var i in storiesList) {
+			renderStory(storiesList[i])
+		}
 	}
 
 	var getStoriesListRequest = new XMLHttpRequest();
