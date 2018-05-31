@@ -1,15 +1,13 @@
-// This is just a simple sample code to show you the usage of the api
-// Feel free to rewrite and improve or delete and start from scratch
-
-(function(){
+function startApp(){
 	var page = 1,
 		itemsPerPage = 30,
 		storiesList,
-		totalItems = 0;
+		totalItems = 0,
+		currentEndpoint = '/v0/topstories.json';
 
 	function processStory (event) {
 		var story = JSON.parse(event.currentTarget.response);
-		var list = document.getElementsByClassName('list')[0];
+		var list = document.getElementById('app').getElementsByClassName('list')[0];
 		var storyItem = document.createElement('li');
 		storyItem.appendChild(createLinkElement(story));
 		storyItem.appendChild(createScoreElement(story));
@@ -51,7 +49,7 @@
 
 	function loadMore(event) {
 		event.preventDefault();
-		if (page < totalItems / itemsPerPage) {
+		if (page + 1 < Math.ceil(totalItems / itemsPerPage)) {
 			page += 1;
 			var list = document.getElementsByClassName('list')[0];
 			list.innerHTML = '';
@@ -59,6 +57,8 @@
 			for (var i in sliced) {
 				renderStory(sliced[i])
 			}
+		} else {
+			displayLoadMoreButton(false);
 		}
 	}
 
@@ -72,23 +72,57 @@
 	function processList (event) {
 		storiesList = JSON.parse(event.currentTarget.response);
 		totalItems = storiesList.length;
+		var list = document.getElementById('app').getElementsByClassName('list')[0];
+		list.innerHTML = '';
 		for (var i in storiesList.slice(0, itemsPerPage)) {
-			renderStory(storiesList[i])
+			renderStory(storiesList[i]);
 		}
-		if (totalItems > 0) {
-			var linkMore = document.createElement('a');
+		createMenu();
+		displayLoadMoreButton(totalItems > itemsPerPage);
+	}
+
+	function displayLoadMoreButton(display) {
+		var exist = document.getElementById('app').getElementsByClassName('load-more');
+		var linkMore = exist.length ? exist[0] : document.createElement('a');
+		if (display) {
 			linkMore.setAttribute('href', '#');
 			linkMore.className = 'load-more';
 			linkMore.innerText = 'More';
 			linkMore.onclick = loadMore;
 			document.getElementById('app').appendChild(linkMore);
+		} else if (exist.length) {
+			document.getElementById('app').removeChild(linkMore);
 		}
 	}
 
-	document.addEventListener("DOMContentLoaded", function() {
+	function loadEndpoint(endpoint) {
+		currentEndpoint = endpoint;
+		page = 1;
 		var getStoriesListRequest = new XMLHttpRequest();
 		getStoriesListRequest.addEventListener('load', processList);
-		getStoriesListRequest.open('GET', 'https://hacker-news.firebaseio.com/v0/topstories.json');
+		getStoriesListRequest.open('GET', 'https://hacker-news.firebaseio.com' + endpoint);
 		getStoriesListRequest.send();
-	});
-})();
+	}
+
+	function createMenu() {
+		var menu = document.getElementById('app').getElementsByClassName('menu')[0];
+		menu.innerHTML = '';
+		menu.appendChild(createMenuItem('Top', '/v0/topstories.json'));
+		menu.appendChild(createMenuItem('New', '/v0/newstories.json'));
+	}
+
+	function createMenuItem(label, endpoint) {
+		var li = document.createElement('li');
+		li.className = endpoint === currentEndpoint ? 'active' : '';
+		var a = document.createElement('a');
+		a.setAttribute('href', '#');
+		a.onclick = function() {
+			loadEndpoint(endpoint);
+		}
+		a.innerText = label;
+		li.appendChild(a);
+		return li;
+	}
+
+	loadEndpoint(currentEndpoint);
+};

@@ -1,13 +1,17 @@
-jasmine.Ajax.install();
-
 describe("Hacker news", function() {
     beforeAll(function() {
+        jasmine.Ajax.install();
         var app  = document.createElement('div');
         app.setAttribute('id', 'app');
         var list = document.createElement('ul');
         list.className = 'list';
         app.appendChild(list);
+        var menu = document.createElement('ul');
+        menu.className = 'menu';
+        app.appendChild(menu);
         document.body.appendChild(app);
+
+        startApp();
 
         var ids = [];
         for (var i = 1; i <= 30; i++) {
@@ -39,13 +43,13 @@ describe("Hacker news", function() {
     });
 
     it('Should render the initial list with 30 items', function() {
-        var list = document.getElementsByClassName('list')[0];
+        var list = document.getElementById('app').getElementsByClassName('list')[0];
         var items = list.getElementsByTagName('li');
         expect(items.length).toBe(30);
     });
 
     it('Should render a link', function() {
-        var list = document.getElementsByClassName('list')[0];
+        var list = document.getElementById('app').getElementsByClassName('list')[0];
         var item = list.getElementsByTagName('li')[0];
         var links = item.getElementsByClassName('link');
         expect(links.length).not.toBeLessThan(1);
@@ -53,7 +57,7 @@ describe("Hacker news", function() {
     });
 
     it('Should render score', function() {
-        var list = document.getElementsByClassName('list')[0];
+        var list = document.getElementById('app').getElementsByClassName('list')[0];
         var item = list.getElementsByTagName('li')[0];
         var scores = item.getElementsByClassName('score');
         expect(scores.length).not.toBeLessThan(1);
@@ -61,7 +65,7 @@ describe("Hacker news", function() {
     });
 
     it('Should render time', function() {
-        var list = document.getElementsByClassName('list')[0];
+        var list = document.getElementById('app').getElementsByClassName('list')[0];
         var item = list.getElementsByTagName('li')[0];
         var times = item.getElementsByClassName('time');
         expect(times.length).not.toBeLessThan(1);
@@ -69,10 +73,42 @@ describe("Hacker news", function() {
     });
 
     it('Should render by', function() {
-        var list = document.getElementsByClassName('list')[0];
+        var list = document.getElementById('app').getElementsByClassName('list')[0];
         var item = list.getElementsByTagName('li')[0];
         var by = item.getElementsByClassName('by');
         expect(by.length).not.toBeLessThan(1);
         expect(by[0].innerHTML).toBe('alex_young');
     });
+
+    it('Should render a menu', function() {
+        var menu = document.getElementById('app').getElementsByClassName('menu')[0];
+        var item = menu.getElementsByTagName('li')[0];
+        expect(item.length).not.toBeLessThan(2);
+    });
+
+    it('Should render a menu with Top active', function() {
+        var menu = document.getElementById('app').getElementsByClassName('menu')[0];
+        var item = menu.getElementsByTagName('li')[0];
+        expect(item.className).toBe('active');
+        var link = item.getElementsByTagName('a')[0];
+        expect(link.innerHTML).toBe('Top');
+    });
+
+    it('Should render a menu with New inactive', function() {
+        var menu = document.getElementById('app').getElementsByClassName('menu')[0];
+        var item = menu.getElementsByTagName('li')[1];
+        expect(item.className).not.toBe('active');
+        var link = item.getElementsByTagName('a')[0];
+        expect(link.innerHTML).toBe('New');
+    });
+
+    it('Should fetch new items on clicking on New', function() {
+        var menu = document.getElementById('app').getElementsByClassName('menu')[0];
+        var item = menu.getElementsByTagName('li')[1];
+        var link = item.getElementsByTagName('a')[0];
+        link.click();
+        var request = jasmine.Ajax.requests.mostRecent();
+        expect(request.url).toBe('https://hacker-news.firebaseio.com/v0/newstories.json');
+    });
+
 });
