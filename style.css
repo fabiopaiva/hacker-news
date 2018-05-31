@@ -27,7 +27,7 @@ html, body {
 }
 
 #app {
-    width: 100%;
+    width: 90%;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -41,24 +41,27 @@ html, body {
 }
 
 #app h1 {
-    font-size: 28px;
-    margin-top: 10px;
+    font-size: 24px;
+    margin: 10px 0 0 0;
+    line-height: 48px;
 }
 
 #app .menu {
     float: right;
     padding: 0;
     margin: 15px;
+    max-width: 45%;
 }
 
 #app .menu li {
     float: left;
     list-style: none;
-    margin-left: 10px;
+    margin-left: 5px;
+    line-height: 26px;
 }
 
 #app .menu li a {
-    padding: 10px;
+    padding: 5px;
 }
 
 #app .menu li.active a {
@@ -81,7 +84,7 @@ html, body {
 
 #app .list li a {
     background: #f9f9f9;
-    margin: 10px 0;
+    margin: 10px 0 0 0;
     padding: 10px;
     display: block;
     color: #333333;
@@ -111,4 +114,18 @@ html, body {
 
 .clr {
     clear: both;
+}
+
+#app .list li .by {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+#app .list li .by a {
+    background: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
 }

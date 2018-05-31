@@ -34,6 +34,13 @@ describe("Hacker news", function() {
             };
             request.respondWith(success);
         }
+
+        var request = jasmine.Ajax.requests.filter('https://hacker-news.firebaseio.com/v0/user/alex_young.json').shift();
+        var success = {
+            status: 200,
+            responseText: '{"created": 1364566967,"id": "alex_young","karma": 1363,"submitted": [17198618,17196801]}'
+        };
+        request.respondWith(success);
     });
 
     afterAll(function() {

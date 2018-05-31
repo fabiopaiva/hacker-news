@@ -7,6 +7,7 @@ function startApp(){
 
 	function processStory (event) {
 		var story = JSON.parse(event.currentTarget.response);
+		if (!story) return;
 		var list = document.getElementById('app').getElementsByClassName('list')[0];
 		var storyItem = document.createElement('li');
 		storyItem.className = 'story-item';
@@ -17,11 +18,6 @@ function startApp(){
 		var scoreListItem = document.createElement('li');
 		scoreListItem.appendChild(createScoreElement(story));
 		subList.appendChild(scoreListItem);
-		link.appendChild(subList);
-
-		var createByListItem = document.createElement('li');
-		createByListItem.appendChild(createByElement(story));
-		subList.appendChild(createByListItem);
 		link.appendChild(subList);
 
 		var timeListItem = document.createElement('li');
@@ -35,6 +31,14 @@ function startApp(){
 
 		storyItem.appendChild(link);
 		list.appendChild(storyItem);
+
+		var getStory = new XMLHttpRequest();
+		getStory.addEventListener('load', function(event) {
+			var user = JSON.parse(event.currentTarget.response);
+			storyItem.appendChild(createByElement(story, user));
+		});
+		getStory.open('GET', 'https://hacker-news.firebaseio.com/v0/user/' + story.by + '.json');
+		getStory.send();
 	}
 
 	function createLinkElement(story) {
@@ -55,21 +59,40 @@ function startApp(){
 
 	function createTimeElement(story) {
 		var time = document.createElement('div');
-		var date = new Date(story.time * 1000);
-		time.innerText = 'At: ' +
-			('0' + date.getDate()).slice(-2) + '/' +
-			('0' + (date.getMonth() + 1)).slice(-2) + '/' +
-			date.getFullYear() + ', ' +
-			('0' + date.getHours()).slice(-2) + ':' +
-			('0' + date.getMinutes()).slice(-2);
+		time.innerText = 'At: ' + timeToDate(story.time);
 		time.className = 'time';
 		return time;
 	}
 
-	function createByElement(story) {
+	function timeToDate(time) {
+		var date = new Date(time * 1000);
+		return ('0' + date.getDate()).slice(-2) + '/' +
+			('0' + (date.getMonth() + 1)).slice(-2) + '/' +
+			date.getFullYear() + ', ' +
+			('0' + date.getHours()).slice(-2) + ':' +
+			('0' + date.getMinutes()).slice(-2);
+	}
+
+	function createByElement(story, user) {
 		var by = document.createElement('div');
 		by.className = 'by';
-		by.innerText = 'By: ' + story.by;
+		var a = document.createElement('a');
+		a.innerText = 'By: ' + story.by;
+		a.setAttribute('href', '#');
+		by.appendChild(a);
+		var div = document.createElement('div');
+		div.style.display = 'none';
+		a.onclick = function(event) {
+			event.preventDefault();
+			div.style.display = div.style.display === 'none' ? '' : 'none' ;
+		}
+		div.innerHTML = 'Since: ' + timeToDate(user.created);
+		if (user.about) {
+			var divAbout = document.createElement('div');
+			divAbout.innerHTML = user.about;
+			div.appendChild(divAbout);
+		}
+		by.appendChild(div);
 		return by;
 	}
 
@@ -135,6 +158,10 @@ function startApp(){
 		menu.innerHTML = '';
 		menu.appendChild(createMenuItem('Top', '/v0/topstories.json'));
 		menu.appendChild(createMenuItem('New', '/v0/newstories.json'));
+		menu.appendChild(createMenuItem('Best', '/v0/beststories.json'));
+		menu.appendChild(createMenuItem('Ask', '/v0/askstories.json'));
+		menu.appendChild(createMenuItem('Show', '/v0/showstories.json'));
+		menu.appendChild(createMenuItem('Job', '/v0/jobstories.json'));
 	}
 
 	function createMenuItem(label, endpoint) {
