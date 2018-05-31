@@ -2,9 +2,12 @@ jasmine.Ajax.install();
 
 describe("Hacker news", function() {
     beforeAll(function() {
+        var app  = document.createElement('div');
+        app.setAttribute('id', 'app');
         var list = document.createElement('ul');
         list.className = 'list';
-        document.body.appendChild(list);
+        app.appendChild(list);
+        document.body.appendChild(app);
 
         var ids = [];
         for (var i = 1; i <= 30; i++) {
@@ -30,8 +33,8 @@ describe("Hacker news", function() {
     });
 
     afterAll(function() {
-        var list = document.getElementsByClassName('list')[0];
-        document.body.removeChild(list);
+        var app = document.getElementById('app');
+        document.body.removeChild(app);
         jasmine.Ajax.uninstall();
     });
 
