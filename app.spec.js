@@ -7,7 +7,7 @@ describe("Hacker news", function() {
         document.body.appendChild(list);
 
         var ids = [];
-        for (var i = 1; i <= 400; i++) {
+        for (var i = 1; i <= 30; i++) {
             ids.push(i);
         }
 
@@ -38,9 +38,9 @@ describe("Hacker news", function() {
         jasmine.Ajax.uninstall();
     });
 
-    it('Should render the list', function() {
+    it('Should render the initial list with 30 items', function() {
         var list = document.querySelector('.list');
         var item = list.querySelectorAll('li');
-        expect(item.length).toBe(400);
+        expect(item.length).toBe(30);
     });
 });

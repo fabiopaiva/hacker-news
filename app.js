@@ -2,6 +2,10 @@
 // Feel free to rewrite and improve or delete and start from scratch
 
 (function(){
+	var page = 1,
+		itemsPerPage = 30,
+		storiesList;
+
 	function processStory (event) {
 		var story = JSON.parse(event.currentTarget.response);
 		var list = document.querySelector('.list');
@@ -18,8 +22,8 @@
 	}
 
 	function processList (event) {
-		var storiesList = JSON.parse(event.currentTarget.response);
-		for (var i in storiesList) {
+		storiesList = JSON.parse(event.currentTarget.response);
+		for (var i in storiesList.slice(0, itemsPerPage)) {
 			renderStory(storiesList[i])
 		}
 	}
