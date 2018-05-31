@@ -1,9 +1,9 @@
 jasmine.Ajax.install();
 
 describe("Hacker news", function() {
-    beforeEach(function() {
+    beforeAll(function() {
         var list = document.createElement('ul');
-        list.classList.add('list');
+        list.className = 'list';
         document.body.appendChild(list);
 
         var ids = [];
@@ -29,18 +29,47 @@ describe("Hacker news", function() {
         }
     });
 
-    afterEach(function() {
-        var list = document.querySelector('.list');
-        document.body.removeChild(list);
-    });
-
     afterAll(function() {
+        var list = document.getElementsByClassName('list')[0];
+        document.body.removeChild(list);
         jasmine.Ajax.uninstall();
     });
 
     it('Should render the initial list with 30 items', function() {
-        var list = document.querySelector('.list');
-        var item = list.querySelectorAll('li');
-        expect(item.length).toBe(30);
+        var list = document.getElementsByClassName('list')[0];
+        var items = list.getElementsByTagName('li');
+        expect(items.length).toBe(30);
+    });
+
+    it('Should render a link', function() {
+        var list = document.getElementsByClassName('list')[0];
+        var item = list.getElementsByTagName('li')[0];
+        var links = item.getElementsByClassName('link');
+        expect(links.length).not.toBeLessThan(1);
+        expect(links[0].href).toBe('https://techcrunch.com/2018/05/30/even-more-money-for-senstime-ai-china/');
+    });
+
+    it('Should render score', function() {
+        var list = document.getElementsByClassName('list')[0];
+        var item = list.getElementsByTagName('li')[0];
+        var scores = item.getElementsByClassName('score');
+        expect(scores.length).not.toBeLessThan(1);
+        expect(scores[0].innerHTML).toBe('37 points');
+    });
+
+    it('Should render time', function() {
+        var list = document.getElementsByClassName('list')[0];
+        var item = list.getElementsByTagName('li')[0];
+        var times = item.getElementsByClassName('time');
+        expect(times.length).not.toBeLessThan(1);
+        expect(times[0].innerHTML).toBe('31/05/2018, 16:47:53');
+    });
+
+    it('Should render by', function() {
+        var list = document.getElementsByClassName('list')[0];
+        var item = list.getElementsByTagName('li')[0];
+        var by = item.getElementsByClassName('by');
+        expect(by.length).not.toBeLessThan(1);
+        expect(by[0].innerHTML).toBe('alex_young');
     });
 });

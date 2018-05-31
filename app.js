@@ -8,9 +8,32 @@
 
 	function processStory (event) {
 		var story = JSON.parse(event.currentTarget.response);
-		var list = document.querySelector('.list');
+		var list = document.getElementsByClassName('list')[0];
 		var storyItem = document.createElement('li');
-		storyItem.innerText = story.title;
+
+		var link = document.createElement('a');
+		link.setAttribute('href', story.url);
+		link.setAttribute('target', '_blank');
+		link.className = 'link';
+		link.innerText = story.title;
+		storyItem.appendChild(link);
+
+		var score = document.createElement('div');
+		score.innerText = story.score + ' points';
+		score.className = 'score';
+		storyItem.appendChild(score);
+
+		var time = document.createElement('div');
+		var date = new Date(story.time * 1000);
+		time.innerText = date.toLocaleString();
+		time.className = 'time';
+		storyItem.appendChild(time);
+
+		var by = document.createElement('div');
+		by.className = 'by';
+		by.innerText = story.by;
+		storyItem.appendChild(by);
+
 		list.appendChild(storyItem);
 	}
 
