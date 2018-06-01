@@ -5,10 +5,26 @@ function startApp(){
 		totalItems = 0,
 		currentEndpoint = '/v0/topstories.json';
 
+	var app = document.getElementById('app');
+	var menu = document.createElement('ul');
+	menu.className = 'menu';
+	var title = document.createElement('h1');
+	title.innerText = 'Hacker News';
+	var list = document.createElement('ul');
+	list.className = 'list';
+
+	app.appendChild(menu);
+	app.appendChild(title);
+	app.appendChild(document.createElement('hr'));
+	app.appendChild(list);
+
+
+	loadEndpoint(currentEndpoint);
+
 	function processStory (event) {
 		var story = JSON.parse(event.currentTarget.response);
 		if (!story) return;
-		var list = document.getElementById('app').getElementsByClassName('list')[0];
+		var list = app.getElementsByClassName('list')[0];
 		var storyItem = document.createElement('li');
 		storyItem.className = 'story-item';
 		var link = createLinkElement(story);
@@ -121,7 +137,7 @@ function startApp(){
 	function processList (event) {
 		storiesList = JSON.parse(event.currentTarget.response);
 		totalItems = storiesList.length;
-		var list = document.getElementById('app').getElementsByClassName('list')[0];
+		var list = app.getElementsByClassName('list')[0];
 		list.innerHTML = '';
 		for (var i in storiesList.slice(0, itemsPerPage)) {
 			renderStory(storiesList[i]);
@@ -131,16 +147,16 @@ function startApp(){
 	}
 
 	function displayLoadMoreButton(display) {
-		var exist = document.getElementById('app').getElementsByClassName('load-more');
+		var exist = app.getElementsByClassName('load-more');
 		var linkMore = exist.length ? exist[0] : document.createElement('a');
 		if (display) {
 			linkMore.setAttribute('href', '#');
 			linkMore.className = 'load-more';
 			linkMore.innerText = 'Load more';
 			linkMore.onclick = loadMore;
-			document.getElementById('app').appendChild(linkMore);
+			app.appendChild(linkMore);
 		} else if (exist.length) {
-			document.getElementById('app').removeChild(linkMore);
+			app.removeChild(linkMore);
 		}
 	}
 
@@ -154,7 +170,7 @@ function startApp(){
 	}
 
 	function createMenu() {
-		var menu = document.getElementById('app').getElementsByClassName('menu')[0];
+		var menu = app.getElementsByClassName('menu')[0];
 		menu.innerHTML = '';
 		menu.appendChild(createMenuItem('Top', '/v0/topstories.json'));
 		menu.appendChild(createMenuItem('New', '/v0/newstories.json'));
@@ -177,6 +193,4 @@ function startApp(){
 		li.appendChild(a);
 		return li;
 	}
-
-	loadEndpoint(currentEndpoint);
 };

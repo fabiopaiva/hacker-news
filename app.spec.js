@@ -3,12 +3,6 @@ describe("Hacker news", function() {
         jasmine.Ajax.install();
         var app  = document.createElement('div');
         app.setAttribute('id', 'app');
-        var list = document.createElement('ul');
-        list.className = 'list';
-        app.appendChild(list);
-        var menu = document.createElement('ul');
-        menu.className = 'menu';
-        app.appendChild(menu);
         document.body.appendChild(app);
 
         startApp();
